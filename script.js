@@ -1,21 +1,27 @@
-let earthTimeInSeconds = 0; // Track time in seconds on Earth
+// Set the time dilation factor
 const timeDilationFactor = 7 * 3600; // 1 hour on Miller's Planet = 7 years on Earth in seconds
 
+// Get the starting time when the webpage loads
+const startTime = new Date().getTime();
+
 function updateMillerTime() {
-    earthTimeInSeconds++; // Increment Earth time by 1 second
+    // Get the current time
+    const currentTime = new Date().getTime();
+    
+    // Calculate the elapsed time in seconds
+    const elapsedTimeInSeconds = (currentTime - startTime) / 1000; // Convert milliseconds to seconds
 
     // Calculate time on Miller's Planet
-    const millerTimeInSeconds = earthTimeInSeconds / timeDilationFactor;
+    const millerTimeInSeconds = elapsedTimeInSeconds / timeDilationFactor;
 
-    // Convert to years, hours, minutes, and seconds
-    const years = Math.floor(millerTimeInSeconds / (365 * 24 * 3600));
-    const hours = Math.floor((millerTimeInSeconds % (365 * 24 * 3600)) / 3600);
-    const minutes = Math.floor((millerTimeInSeconds % 3600) / 60);
-    const seconds = Math.floor(millerTimeInSeconds % 60);
+    // Convert to hours, minutes, and seconds
+    const hours = Math.floor(millerTimeInSeconds % 24);
+    const minutes = Math.floor((millerTimeInSeconds % 1) * 60);
+    const seconds = Math.floor((millerTimeInSeconds % (1 / 60)) * 60);
 
     // Update the result in the HTML
     document.getElementById('result').innerText = 
-        `Time passed on Miller's Planet: ${years} years, ${hours} hours, ${minutes} minutes, and ${seconds} seconds`;
+        `Time passed on Miller's Planet: ${hours} hours, ${minutes} minutes, and ${seconds} seconds`;
 }
 
 // Call the updateMillerTime function every second
