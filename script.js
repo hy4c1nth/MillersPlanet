@@ -7,14 +7,20 @@ function updateMillerTime() {
   const now = new Date(); // Current Earth time
   const earthSecondsElapsed = Math.floor((now - MOVIE_RELEASE_DATE) / 1000); // Total Earth seconds
 
-  // Convert Earth seconds into Miller's time in hours
+  // Convert Earth seconds into Miller's time
   const millerSecondsElapsed = earthSecondsElapsed / MILLER_RATIO;
   const millerHours = Math.floor(millerSecondsElapsed); // Full hours passed
   const millerMinutes = Math.floor((millerSecondsElapsed % 1) * 60); // Remaining minutes
+  const millerSeconds = Math.floor(((millerSecondsElapsed % 1) * 60) % 1 * 60); // Remaining seconds
 
-  // Update HTML elements (if needed)
-  document.getElementById('hours').textContent = millerHours.toString().padStart(2, '0');
+  // Determine the correct label for 'hours'
+  const hoursLabel = millerHours >= 10 ? 'hours' : 'hour';
+
+  // Update HTML elements (adjusting format)
+  document.getElementById('hours').textContent = millerHours.toString();
+  document.getElementById('hours-label').textContent = hoursLabel;
   document.getElementById('minutes').textContent = millerMinutes.toString().padStart(2, '0');
+  document.getElementById('seconds').textContent = millerSeconds.toString().padStart(2, '0');
 }
 
 // Call the update function every second
