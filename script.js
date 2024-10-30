@@ -1,13 +1,18 @@
-document.getElementById('calculate').addEventListener('click', function() {
-    const earthTime = parseFloat(document.getElementById('earthTime').value);
-    const timeDilationFactor = 7; // 1 hour on Miller's Planet = 7 years on Earth
+const MILLER_TO_EARTH_RATIO = 7 * 365.25 * 24 * 60 * 60; 
 
-    if (!isNaN(earthTime) && earthTime >= 0) {
-        const timeOnMiller = earthTime / timeDilationFactor; // Calculate time on Miller's Planet
-        document.getElementById('result').innerText = 
-            `Time passed on Miller's Planet: ${timeOnMiller.toFixed(6)} hours`;
-    } else {
-        document.getElementById('result').innerText = 
-            'Please enter a valid number of years.';
-    }
-});
+
+function updateMillersTime() {
+  const earthTimeElapsed = Date.now() / 1000; 
+  const millerTimeElapsed = earthTimeElapsed / MILLER_TO_EARTH_RATIO; 
+
+ 
+  const hours = Math.floor(millerTimeElapsed / 3600).toString().padStart(2, '0');
+  const minutes = Math.floor((millerTimeElapsed % 3600) / 60).toString().padStart(2, '0');
+  const seconds = Math.floor(millerTimeElapsed % 60).toString().padStart(2, '0');
+
+ 
+  document.getElementById('millers-time').textContent = `${hours}:${minutes}:${seconds}`;
+}
+
+
+setInterval(updateMillersTime, 1000);
