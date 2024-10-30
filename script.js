@@ -1,23 +1,31 @@
-// Constants for Miller's Planet Time (1 hour on Miller's Planet = 7 years on Earth)
-const EARTH_TO_MILLER_RATIO = 7 * 365.25 * 24; // hours to Earth years conversion
+// Constants for Miller's Planet Time (1 hour on Miller's Planet = 7 Earth years)
+const MILLER_HOURS_TO_EARTH_YEARS = 7;
 const MOVIE_RELEASE_DATE = new Date('2014-11-07T00:00:00Z');
 
-// Function to calculate time difference and convert to Miller's planet time
+// Function to calculate how much time has passed on Miller's Planet
 function updateMillerTime() {
   const now = new Date();
-  const timeDifferenceInMs = now - MOVIE_RELEASE_DATE;
-  const timeDifferenceInHours = timeDifferenceInMs / (1000 * 60 * 60); 
+  const timeDifferenceInMs = now - MOVIE_RELEASE_DATE; // Earth time passed in ms
 
-  // Miller's planet equivalent hours
-  const millerHours = timeDifferenceInHours / EARTH_TO_MILLER_RATIO;
+  // Convert Earth time difference to seconds, then to Miller's planet time
+  const earthSeconds = timeDifferenceInMs / 1000; 
+  const millerSeconds = earthSeconds / (MILLER_HOURS_TO_EARTH_YEARS * 365.25 * 24 * 60 * 60);
 
-  // Convert hours to years, months, days, etc.
-  const years = Math.floor(millerHours / (24 * 365.25));
-  const months = Math.floor((millerHours % (24 * 365.25)) / (24 * 30.44));
-  const days = Math.floor((millerHours % (24 * 30.44)) / 24);
-  const hours = Math.floor(millerHours % 24);
-  const minutes = Math.floor((millerHours * 60) % 60);
-  const seconds = Math.floor((millerHours * 3600) % 60);
+  // Convert Miller's time into years, months, days, hours, minutes, and seconds
+  const years = Math.floor(millerSeconds / (365.25 * 24 * 60 * 60));
+  const remainingSecondsAfterYears = millerSeconds % (365.25 * 24 * 60 * 60);
+
+  const months = Math.floor(remainingSecondsAfterYears / (30.44 * 24 * 60 * 60));
+  const remainingSecondsAfterMonths = remainingSecondsAfterYears % (30.44 * 24 * 60 * 60);
+
+  const days = Math.floor(remainingSecondsAfterMonths / (24 * 60 * 60));
+  const remainingSecondsAfterDays = remainingSecondsAfterMonths % (24 * 60 * 60);
+
+  const hours = Math.floor(remainingSecondsAfterDays / (60 * 60));
+  const remainingSecondsAfterHours = remainingSecondsAfterDays % (60 * 60);
+
+  const minutes = Math.floor(remainingSecondsAfterHours / 60);
+  const seconds = Math.floor(remainingSecondsAfterHours % 60);
 
   // Update the HTML with the calculated time
   document.getElementById('years').textContent = years;
